@@ -16,15 +16,8 @@ func main() {
 		"/yaml-godoc":     "https://godoc.org/gopkg.in/yaml.v2",
 	}
 
-	yaml := `
-- path: /urlshort
-  url: https://github.com/gophercises/urlshort
-- path: /urlshort-final
-  url: https://github.com/gophercises/urlshort/tree/solution
-`
-
 	pathHandler := MapHandler(pathsToUrls, mux)
-	yamlHandler, err := YAMLHandler([]byte(yaml), pathHandler)
+	yamlHandler, err := YAMLHandler(pathHandler)
 
 	if err != nil {
 		panic(err)
@@ -48,7 +41,7 @@ func MapHandler(paths map[string]string, fallback http.Handler) http.HandlerFunc
 	}
 }
 
-func YAMLHandler(yaml []byte, fallback http.Handler) (http.HandlerFunc, error) {
+func YAMLHandler(fallback http.Handler) (http.HandlerFunc, error) {
 	parsedYaml, err := parseYAML()
 	if err != nil {
 		return nil, err
